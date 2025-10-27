@@ -15,7 +15,7 @@
 # Procedure
 
 ## ADB & Temporary Internet Setup
-| In order to install the application, we need to temporarily enable developer access on the TV.
+> In order to install the application, we need to temporarily enable developer access on the TV.
 
 1. Go to **Settings** -> **System** -> **About**, scroll down to highlight **Android TV OS build**. Select this field multiple times until you see a popup that states "You are now a developer".
 2. Go back to **Settings** -> **System** and find **Developer Options**
@@ -23,7 +23,7 @@
 
 ## Installing
 
-| To connect to the TV to install the app, we need some kind of existing connection. In the future we could potentially use a USB cable connected directly to the laptop, but currently I am using the GLINet router to connect the laptop and TV over the same network.
+> To connect to the TV to install the app, we need some kind of existing connection. In the future we could potentially use a USB cable connected directly to the laptop, but currently I am using the GLINet router to connect the laptop and TV over the same network.
 
 1. Connect the GLinet router to the TV over ethernet, and connect your laptop to the wifi network hosted by the router.
 2. Identify the temporary IP address on the network in **Settings** -> **Network and Internet**
@@ -41,7 +41,7 @@
 
 ## Disabling Debug Access
 
-| Now that the application is installed and the network has been connected, we need to disable ADB access.
+> Now that the application is installed and the network has been connected, we need to disable ADB access.
 
 1. Navigate to **Settings** -> **System** -> **Developer options**.
 2. Disable **ADB debugging**, and scroll to the top and disable **Enable developer options**
