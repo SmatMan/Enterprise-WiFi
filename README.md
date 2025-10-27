@@ -30,8 +30,6 @@ For deploying to multiple TVs with the same network credentials, you can configu
 * No root access required
 * Easy recompilation for credential updates
 
-See [PRESET_CONFIGURATION.md](PRESET_CONFIGURATION.md) for detailed instructions on configuring and building APKs with preset credentials.
-
 ## Building
 To build with recent Android Studio, update the Gradle wrapper and plugin. This repo now targets SDK 34 and uses Gradle plugin 8.1.0. Run `./gradlew assembleDebug` to create an APK.
 
