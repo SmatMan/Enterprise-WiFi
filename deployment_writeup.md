@@ -47,3 +47,6 @@
 2. Disable **ADB debugging**, and scroll to the top and disable **Enable developer options**
 3. When you exit out this menu, the developer options menu should be gone. 
 
+
+# Removing the Network Configuration
+1. To remove the saved network configuration, you must find the application in the apps menu and uninstall it.
