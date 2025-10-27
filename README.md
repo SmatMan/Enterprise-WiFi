@@ -1,8 +1,3 @@
-## Quick Links
-<img src='https://github.com/ITVlab/Enterprise-Wi-Fi/blob/master/promo/banner.png?raw=true' />
-
-[Download on Google Play](https://play.google.com/store/apps/details?id=com.felkertech.ussenterprise)
-
 # Enterprise Wi-Fi
 Android TV does not by default have a user interface for setting up Enterprise Wi-Fi networks. These networks, use the [Extensible Authentication Protocol (EAP)](https://en.wikipedia.org/wiki/Extensible_Authentication_Protocol), a framework for authenticating your device with the Wi-Fi network by providing both a username and password.
 
@@ -40,3 +35,5 @@ See [PRESET_CONFIGURATION.md](PRESET_CONFIGURATION.md) for detailed instructions
 ## Building
 To build with recent Android Studio, update the Gradle wrapper and plugin. This repo now targets SDK 34 and uses Gradle plugin 8.1.0. Run `./gradlew assembleDebug` to create an APK.
 
+# Credit
+Thank you to [@ITVlab](https://github.com/ITVlab/Enterprise-Wi-Fi) and [@4-Dimethylamino-78-dihydroxyflavone](https://github.com/4-Dimethylamino-78-dihydroxyflavone/Enterprise-Wi-Fi) for their contributions to the original code. 
