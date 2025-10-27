@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "ssid": "SSID",
+  "username": "username@eva.eduroam.ca",
+  "password": "password",
+  "eap": "PEAP",
+  "phase2": "MSCHAPV2"
+}
