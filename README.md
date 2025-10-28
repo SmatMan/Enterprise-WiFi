@@ -11,6 +11,7 @@ There is another app that fulfills this need on Android TV, although I have foun
 * Connection details can be saved and updated
 * Automatically fills in fields where possible
 * Shows logs of connection status to show you progress is happening
+* **Disconnect Button**: Remove network suggestions/configurations without uninstalling (see [DISCONNECT_FUNCTIONALITY.md](DISCONNECT_FUNCTIONALITY.md))
 * **Preset Configuration**: Compile Wi-Fi credentials directly into the APK for easy deployment (see [PRESET_CONFIGURATION.md](PRESET_CONFIGURATION.md))
 
 <img src='https://github.com/ITVlab/Enterprise-Wi-Fi/blob/master/promo/device-2016-09-07-012808.png?raw=true' />
@@ -22,6 +23,11 @@ When the SSID **UofT** is selected, the app automatically configures the connect
 
 ### Android 10 and newer
 Starting with Android 10, third-party apps can no longer directly add Wi‑Fi configurations. On these versions the app now uses **network suggestions**. After you press Connect you will be asked to confirm the suggestion in the system Wi‑Fi settings.
+
+The **Disconnect** button allows removal of network suggestions:
+- **Android 11+**: Removes all suggestions from any session (full functionality)
+- **Android 10**: Can only remove suggestions from the current session (platform limitation)
+- See [DISCONNECT_FUNCTIONALITY.md](DISCONNECT_FUNCTIONALITY.md) for details
 
 ## Preset Configuration
 For deploying to multiple TVs with the same network credentials, you can configure a preset network that is compiled into the APK. This provides:

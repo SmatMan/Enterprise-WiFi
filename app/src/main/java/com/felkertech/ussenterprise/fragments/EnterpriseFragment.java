@@ -398,19 +398,38 @@ public class EnterpriseFragment extends Fragment {
             return;
         }
 
-        if (lastSuggestion != null) {
-            List<WifiNetworkSuggestion> suggestions = Collections.singletonList(lastSuggestion);
-            int status = wifiManager.removeNetworkSuggestions(suggestions);
+        List<WifiNetworkSuggestion> suggestionsToRemove = new ArrayList<>();
+        
+        // Android 11+ (API 30+): Can retrieve all suggestions from previous sessions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            List<WifiNetworkSuggestion> allSuggestions = wifiManager.getNetworkSuggestions();
+            if (allSuggestions != null && !allSuggestions.isEmpty()) {
+                suggestionsToRemove.addAll(allSuggestions);
+                Logd("Found " + allSuggestions.size() + " network suggestion(s) to remove");
+            }
+        } 
+        // Android 10 (API 29): Can only remove suggestions from current session
+        else if (lastSuggestion != null) {
+            suggestionsToRemove.add(lastSuggestion);
+        }
+        
+        if (!suggestionsToRemove.isEmpty()) {
+            int status = wifiManager.removeNetworkSuggestions(suggestionsToRemove);
             if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
-                Logd("Network suggestion removed successfully");
-                Toast.makeText(getActivity(), "Network suggestion removed", Toast.LENGTH_LONG).show();
+                Logd("Network suggestion(s) removed successfully");
+                Toast.makeText(getActivity(), "Removed " + suggestionsToRemove.size() + 
+                        " network suggestion(s)", Toast.LENGTH_LONG).show();
                 lastSuggestion = null;
             } else {
-                Logd("Failed to remove network suggestion: " + status);
-                Toast.makeText(getActivity(), "Failed to remove network suggestion", Toast.LENGTH_LONG).show();
+                Logd("Failed to remove network suggestion(s): " + status);
+                Toast.makeText(getActivity(), "Failed to remove network suggestion(s)", 
+                        Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getActivity(), "No network suggestion to remove", Toast.LENGTH_SHORT).show();
+            String message = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R 
+                    ? "No network suggestions found" 
+                    : "No network suggestion to remove (session-only tracking on Android 10)";
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
