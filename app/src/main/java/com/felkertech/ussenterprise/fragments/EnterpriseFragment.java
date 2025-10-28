@@ -41,6 +41,7 @@ import com.felkertech.ussenterprise.ui.EapSpinnerAdapter;
 import com.felkertech.ussenterprise.ui.Phase2SpinnerAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,6 +54,7 @@ public class EnterpriseFragment extends Fragment {
     private String ssid = "";
     private String userName = "";
     private String passWord = "";
+    private WifiNetworkSuggestion lastSuggestion = null;
 
     private BroadcastReceiver mWifiStateChangedReceiver = new BroadcastReceiver() {
 
@@ -307,6 +309,14 @@ public class EnterpriseFragment extends Fragment {
             });
         }
         
+        // Setup disconnect button
+        baseLayout.findViewById(R.id.button_disconnect).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect();
+            }
+        });
+        
         printSavedWifiNetworks();
 
         return baseLayout;
@@ -361,14 +371,84 @@ public class EnterpriseFragment extends Fragment {
                 .setWpa2EnterpriseConfig(enterpriseConfig)
                 .setIsAppInteractionRequired(true)
                 .build();
-        List<WifiNetworkSuggestion> suggestions = java.util.Collections.singletonList(suggestion);
+        List<WifiNetworkSuggestion> suggestions = Collections.singletonList(suggestion);
         int status = wifiManager.addNetworkSuggestions(suggestions);
         if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
             Logd("Suggestion error: " + status);
             Toast.makeText(getActivity(), "Failed to add network suggestion", Toast.LENGTH_LONG).show();
         } else {
+            lastSuggestion = suggestion;
             Toast.makeText(getActivity(), "Suggestion added. Confirm in Wi-Fi settings", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void disconnect() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            disconnectSuggestion();
+        } else {
+            disconnectNetwork();
+        }
+    }
+
+    private void disconnectSuggestion() {
+        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null) {
+            Toast.makeText(getActivity(), "Wi-Fi service unavailable", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (lastSuggestion != null) {
+            List<WifiNetworkSuggestion> suggestions = Collections.singletonList(lastSuggestion);
+            int status = wifiManager.removeNetworkSuggestions(suggestions);
+            if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+                Logd("Network suggestion removed successfully");
+                Toast.makeText(getActivity(), "Network suggestion removed", Toast.LENGTH_LONG).show();
+                lastSuggestion = null;
+            } else {
+                Logd("Failed to remove network suggestion: " + status);
+                Toast.makeText(getActivity(), "Failed to remove network suggestion", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(getActivity(), "No network suggestion to remove", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void disconnectNetwork() {
+        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null) {
+            Toast.makeText(getActivity(), "Wi-Fi service unavailable", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (ssid.isEmpty()) {
+            Toast.makeText(getActivity(), "No network to disconnect", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+        if (list == null) {
+            Logd("Cannot access configured networks (may require system permissions)");
+            Toast.makeText(getActivity(), "Unable to access network configurations", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        for (WifiConfiguration config : list) {
+            if (config.SSID != null && config.SSID.equals("\"" + ssid + "\"")) {
+                boolean removed = wifiManager.removeNetwork(config.networkId);
+                if (removed) {
+                    wifiManager.saveConfiguration();
+                    Logd("Network removed: " + ssid);
+                    Toast.makeText(getActivity(), "Network removed: " + ssid, Toast.LENGTH_LONG).show();
+                } else {
+                    Logd("Failed to remove network: " + ssid);
+                    Toast.makeText(getActivity(), "Failed to remove network", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+        Toast.makeText(getActivity(), "Network not found in configured networks", Toast.LENGTH_SHORT).show();
     }
 
     public void addNetwork(WifiConfiguration configuration) {
