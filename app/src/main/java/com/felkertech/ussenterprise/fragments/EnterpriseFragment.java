@@ -436,39 +436,27 @@ public class EnterpriseFragment extends Fragment {
     private void disconnectNetwork() {
         WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
+                
         if (wifiManager == null) {
             Toast.makeText(getActivity(), "Wi-Fi service unavailable", Toast.LENGTH_LONG).show();
             return;
         }
-
-        if (ssid.isEmpty()) {
-            Toast.makeText(getActivity(), "No network to disconnect", Toast.LENGTH_SHORT).show();
-            return;
+    
+        // Create an empty list of suggestions
+        List<WifiNetworkSuggestion> emptyList = new ArrayList<>();
+    
+        // Pass the empty list to "replace" the current suggestions
+        int status = wifiManager.addNetworkSuggestions(emptyList);
+    
+        if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+            Log.d("WifiHelper", "All network suggestions removed successfully.");
+            Toast.makeText(getActivity(), "Network suggestion removed", Toast.LENGTH_LONG).show();
+        } else {
+            Log.d("WifiHelper", "Failed to remove network suggestions.");
+            Toast.makeText(getActivity(), "Failed to remove suggestion", Toast.LENGTH_LONG).show();
         }
-
-        List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
-        if (list == null) {
-            Logd("Cannot access configured networks (may require system permissions)");
-            Toast.makeText(getActivity(), "Unable to access network configurations", Toast.LENGTH_LONG).show();
-            return;
-        }
-        
-        for (WifiConfiguration config : list) {
-            if (config.SSID != null && config.SSID.equals("\"" + ssid + "\"")) {
-                boolean removed = wifiManager.removeNetwork(config.networkId);
-                if (removed) {
-                    wifiManager.saveConfiguration();
-                    Logd("Network removed: " + ssid);
-                    Toast.makeText(getActivity(), "Network removed: " + ssid, Toast.LENGTH_LONG).show();
-                } else {
-                    Logd("Failed to remove network: " + ssid);
-                    Toast.makeText(getActivity(), "Failed to remove network", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
-        Toast.makeText(getActivity(), "Network not found in configured networks", Toast.LENGTH_SHORT).show();
     }
+
 
     public void addNetwork(WifiConfiguration configuration) {
         WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
