@@ -111,7 +111,7 @@ Last updated {{< meta date >}}.
 2. Disable **USB debugging**, and scroll to the top and disable **Enable developer options**
 3. When you exit out this menu, the developer options menu should be gone.
 
-> You're done! The wifi connection should be all ready.
+> [You're done!]{.mark} The wifi connection should be working fine now.
 
 # Appendix
 
