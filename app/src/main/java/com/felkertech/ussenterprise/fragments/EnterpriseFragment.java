@@ -391,6 +391,12 @@ public class EnterpriseFragment extends Fragment {
     }
 
     private void disconnectSuggestion() {
+        // This method is for Android 10+ (API 29+) only
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            Toast.makeText(getActivity(), "This method requires Android 10 or higher", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null) {
