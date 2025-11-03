@@ -407,29 +407,23 @@ public class EnterpriseFragment extends Fragment {
                 suggestionsToRemove.addAll(allSuggestions);
                 Logd("Found " + allSuggestions.size() + " network suggestion(s) to remove");
             }
-        } 
-        // Android 10 (API 29): Can only remove suggestions from current session
-        else if (lastSuggestion != null) {
-            suggestionsToRemove.add(lastSuggestion);
         }
         
-        if (!suggestionsToRemove.isEmpty()) {
-            int status = wifiManager.removeNetworkSuggestions(suggestionsToRemove);
-            if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
-                Logd("Network suggestion(s) removed successfully");
-                Toast.makeText(getActivity(), "Removed " + suggestionsToRemove.size() + 
-                        " network suggestion(s)", Toast.LENGTH_LONG).show();
-                lastSuggestion = null;
-            } else {
-                Logd("Failed to remove network suggestion(s): " + status);
-                Toast.makeText(getActivity(), "Failed to remove network suggestion(s)", 
-                        Toast.LENGTH_LONG).show();
-            }
+        // For Android 10+ (API 29+): Pass empty list to remove ALL network suggestions
+        // According to Android API docs, removeNetworkSuggestions with an empty list
+        // removes all suggestions added by this app, even after app restart
+        int status = wifiManager.removeNetworkSuggestions(suggestionsToRemove);
+        if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+            Logd("Network suggestion(s) removed successfully");
+            String message = suggestionsToRemove.isEmpty() 
+                    ? "All network suggestions removed" 
+                    : "Removed " + suggestionsToRemove.size() + " network suggestion(s)";
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+            lastSuggestion = null;
         } else {
-            String message = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R 
-                    ? "No network suggestions found" 
-                    : "No network suggestion to remove (session-only tracking on Android 10)";
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Logd("Failed to remove network suggestion(s): " + status);
+            Toast.makeText(getActivity(), "Failed to remove network suggestion(s)", 
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -442,18 +436,27 @@ public class EnterpriseFragment extends Fragment {
             return;
         }
     
-        // Create an empty list of suggestions
-        List<WifiNetworkSuggestion> emptyList = new ArrayList<>();
-    
-        // Pass the empty list to "replace" the current suggestions
-        int status = wifiManager.addNetworkSuggestions(emptyList);
-    
-        if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
-            Log.d("WifiHelper", "All network suggestions removed successfully.");
-            Toast.makeText(getActivity(), "Network suggestion removed", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d("WifiHelper", "Failed to remove network suggestions.");
-            Toast.makeText(getActivity(), "Failed to remove suggestion", Toast.LENGTH_LONG).show();
+        // For Android 9 and below: Use legacy WifiConfiguration API
+        List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();
+        if (configuredNetworks == null || configuredNetworks.isEmpty()) {
+            Toast.makeText(getActivity(), "No configured networks found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        boolean removed = false;
+        for (WifiConfiguration config : configuredNetworks) {
+            if (config.SSID != null && config.SSID.equals("\"" + ssid + "\"")) {
+                wifiManager.removeNetwork(config.networkId);
+                wifiManager.saveConfiguration();
+                Logd("Network removed: " + ssid);
+                Toast.makeText(getActivity(), "Network removed: " + ssid, Toast.LENGTH_LONG).show();
+                removed = true;
+                break;
+            }
+        }
+        
+        if (!removed) {
+            Toast.makeText(getActivity(), "Network not found: " + ssid, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -19,17 +19,17 @@ On Android 11 and newer versions, the disconnect functionality can remove **all 
 - Toast message shows: "Removed X network suggestion(s)"
 
 ### Android 10 (API 29)
-On Android 10, the disconnect functionality has **platform limitations** and can only remove network suggestions from the current app session.
+On Android 10, the disconnect functionality can now remove **all network suggestions** added by the app, including those from previous app sessions.
 
-**Limitation:** The `getNetworkSuggestions()` API is not available on Android 10
-- Can only track suggestions added during the current app session
-- Cannot retrieve suggestions from previous sessions
-- The `lastSuggestion` field tracks the most recent suggestion
+**API Used:** `WifiManager.removeNetworkSuggestions()` with empty list
+- Passing an empty list removes ALL network suggestions added by this app
+- Works across app sessions (persists after app restart)
+- Works even after force-stopping the app
 
 **User Experience:**
-- Press "Disconnect" button after connecting in the same session: Suggestion is removed
-- Press "Disconnect" button after app restart: Shows "No network suggestion to remove (session-only tracking on Android 10)"
-- **To remove old suggestions:** User must uninstall/reinstall the app or manually remove from Android Wi-Fi settings
+- Press "Disconnect" button
+- All network suggestions added by this app are removed
+- Toast message shows: "All network suggestions removed"
 
 ### Android 9 and Earlier (API 28 and below)
 On Android 9 and earlier, the app uses the legacy Wi-Fi configuration API.
@@ -49,29 +49,33 @@ On Android 9 and earlier, the app uses the legacy Wi-Fi configuration API.
 | Android Version | API Level | Can Remove Previous Session Suggestions | Method |
 |----------------|-----------|---------------------------------------|--------|
 | Android 11+    | 30+       | ✅ Yes                                | `getNetworkSuggestions()` |
-| Android 10     | 29        | ❌ No (session-only)                  | `removeNetworkSuggestions()` with tracked suggestion |
+| Android 10     | 29        | ✅ Yes                                | `removeNetworkSuggestions()` with empty list |
 | Android 9-     | 28-       | ✅ Yes                                | `removeNetwork()` |
 
-## Why Android 10 Has This Limitation
+## Why Android 10 Previously Had This Limitation (Now Fixed)
 
-Android 10 introduced the Network Suggestions API to improve security and privacy. However, the `getNetworkSuggestions()` method to retrieve all suggestions wasn't added until Android 11 (API 30). This creates a gap where:
+Android 10 introduced the Network Suggestions API to improve security and privacy. However, the `getNetworkSuggestions()` method to retrieve all suggestions wasn't added until Android 11 (API 30). 
 
-1. Apps cannot use the old `getConfiguredNetworks()` API (returns null for non-system apps on API 29+)
-2. Apps cannot use `getNetworkSuggestions()` yet (only available on API 30+)
-3. Apps must track suggestions themselves, but only for the current session
+**The Solution:** According to the Android API documentation, calling `removeNetworkSuggestions()` with an empty list on Android 10+ removes ALL network suggestions added by the app, regardless of when they were added. This provides the same functionality as Android 11's `getNetworkSuggestions()` approach for removal purposes.
 
-This is a **known Android platform limitation** and not a bug in this app.
+This fix enables the disconnect button to work properly on Android 10 even after:
+1. Force-stopping the app
+2. Restarting the app with no context
+3. Previous app sessions
 
 ## Workarounds for Android 10
 
-If you're on Android 10 and need to remove network suggestions from previous sessions:
+~~If you're on Android 10 and need to remove network suggestions from previous sessions:~~
 
-1. **Uninstall and reinstall the app** - This clears all app data including suggestions
-2. **Manually remove from Android Settings:**
+The disconnect button now works properly on Android 10! It will remove all network suggestions even after force-stopping and restarting the app.
+
+If for some reason the disconnect button doesn't work, you can manually remove networks:
+
+1. **Manually remove from Android Settings:**
    - Go to Settings → Network & Internet → Wi-Fi
    - Tap on the connected network
    - Select "Forget" or remove the network
-3. **Clear app data:**
+2. **Clear app data:**
    - Go to Settings → Apps → Enterprise Wi-Fi
    - Tap "Storage" → "Clear Data"
 
@@ -101,16 +105,15 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
 ### For Android 10 (disconnectSuggestion):
 ```java
-else if (lastSuggestion != null) {
-    // Can only remove suggestion from current session
-    wifiManager.removeNetworkSuggestions(Collections.singletonList(lastSuggestion));
-}
+// Pass empty list to remove ALL suggestions (works even after app restart)
+List<WifiNetworkSuggestion> suggestionsToRemove = new ArrayList<>();
+wifiManager.removeNetworkSuggestions(suggestionsToRemove);
 ```
 
 ### For Android 9- (disconnectNetwork):
 ```java
-List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
-for (WifiConfiguration config : list) {
+List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();
+for (WifiConfiguration config : configuredNetworks) {
     if (config.SSID.equals("\"" + ssid + "\"")) {
         wifiManager.removeNetwork(config.networkId);
         wifiManager.saveConfiguration();
