@@ -187,52 +187,6 @@ public class EnterpriseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View baseLayout = inflater.inflate(R.layout.activity_main, null);
 
-        baseLayout.findViewById(R.id.clone).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final SavedWifiDatabase savedWifiDatabase =
-                        SavedWifiDatabase.getInstance(getActivity());
-                new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme)
-                        .setTitle(R.string.choose_saved_profile)
-                        .setItems(savedWifiDatabase.getSavedWifiSsids().toArray(
-                                new CharSequence[savedWifiDatabase.getSavedWifiSsids().size()]),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        EnterpriseWifiConnection connection = savedWifiDatabase
-                                                .getSavedWifiConnections().get(which);
-                                        ((EditText) baseLayout.findViewById(R.id.ssid_edit))
-                                                .setText(connection.getSsid());
-                                        ((EditText) baseLayout.findViewById(R.id.identity))
-                                                .setText(connection.getIdentity());
-                                        ((EditText) baseLayout.findViewById(R.id.password))
-                                                .setText(connection.getPassword());
-                                        ((Spinner) baseLayout.findViewById(R.id.eap))
-                                                .setSelection(connection.getEap());
-                                    }
-                                })
-                        .show();
-            }
-        });
-        baseLayout.findViewById(R.id.ssid_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final List<String> enterpriseSsids = getEnterpriseSsids();
-                new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme)
-                        .setTitle(R.string.choose_wifi_ssid)
-                        .setItems(enterpriseSsids
-                                        .toArray(new CharSequence[enterpriseSsids.size()]),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ((EditText) baseLayout.findViewById(R.id.ssid_edit))
-                                                .setText(enterpriseSsids.get(which));
-                                    }
-                                })
-                        .show();
-            }
-        });
-
         final int[] eap = new int[1];
         final int[] phase2 = new int[1];
 

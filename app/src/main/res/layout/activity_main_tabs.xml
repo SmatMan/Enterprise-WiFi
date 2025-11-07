@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:id="@+id/tabanim_tabs"
             android:background="?attr/colorPrimaryDark"
+            android:visibility="gone"
             android:layout_height="wrap_content" />
     </android.support.design.widget.AppBarLayout>
 

@@ -18,11 +18,6 @@ import com.felkertech.ussenterprise.model.Eap;
 public class EapSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
     int[] eapTypes = new int[] {
             Eap.METHOD_PEAP,
-            Eap.METHOD_TLS,
-            Eap.METHOD_TTLS,
-            Eap.METHOD_PWD,
-            Eap.METHOD_SIM,
-            Eap.METHOD_AKA,
     };
     private Activity mActivity;
 

@@ -19,11 +19,7 @@ import com.felkertech.ussenterprise.model.Phase2;
  */
 public class Phase2SpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
     int[] phase2Types = new int[] {
-            Phase2.AUTHENTICATION_NONE,
-            Phase2.AUTHENTICATION_PAP,
-            Phase2.AUTHENTICATION_MSCHAP,
             Phase2.AUTHENTICATION_MSCHAPV2,
-            Phase2.AUTHENTICATION_GTC,
     };
     private Activity mActivity;
 
