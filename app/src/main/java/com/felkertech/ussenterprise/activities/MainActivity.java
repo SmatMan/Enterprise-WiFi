@@ -36,7 +36,6 @@ import android.widget.Toast;
 
 import com.felkertech.ussenterprise.fragments.EnterpriseFragment;
 import com.felkertech.ussenterprise.R;
-import com.felkertech.ussenterprise.fragments.PersonalFragment;
 import com.felkertech.ussenterprise.model.EnterpriseWifiConnection;
 import com.felkertech.ussenterprise.model.SavedWifiDatabase;
 import com.felkertech.ussenterprise.ui.EapSpinnerAdapter;
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private String TAG = MainActivity.class.getSimpleName();
     private EnterpriseFragment enterpriseFragment;
-    private PersonalFragment personalFragment;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -83,9 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         enterpriseFragment = new EnterpriseFragment();
-        personalFragment = new PersonalFragment();
         adapter.addFrag(enterpriseFragment, "Enterprise");
-        adapter.addFrag(personalFragment, "Home");
         viewPager.setAdapter(adapter);
     }
 
@@ -96,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Yay!
             enterpriseFragment.loadSsids();
-            personalFragment.loadSsids();
         }
     }
 

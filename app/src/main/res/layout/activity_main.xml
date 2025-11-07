@@ -44,29 +44,19 @@
         android:orientation="vertical"
         android:layout_toStartOf="@id/log_layout"
         android:layout_height="match_parent">
-        <Button
-            android:layout_width="wrap_content"
-            android:text="Clone from profile"
-            android:id="@+id/clone"
-            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:id="@+id/ssid_layout"
-            android:layout_below="@id/clone"
             android:layout_height="wrap_content">
-            <Button
-                android:layout_width="wrap_content"
-                android:id="@+id/ssid_list"
-                android:text="Choose from list"
-                android:layout_height="wrap_content" />
             <EditText
                 style="@style/input_text"
                 android:id="@+id/ssid_edit"
+                android:text="UofT"
                 android:hint="Custom SSID" />
         </LinearLayout>
         <EditText
             style="@style/input_text"
-            android:hint="Identity"
+            android:hint="UTORid"
             android:id="@+id/identity"
             android:layout_below="@id/ssid_layout" />
         <EditText
