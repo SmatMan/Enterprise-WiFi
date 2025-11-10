@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-11-03">
+<meta name="dcterms.date" content="2025-11-10">
 
 <title>Oak House TV Wi-Fi Procedure</title>
 <style>
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -59,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-problem" id="toc-the-problem" class="nav-link" data-scroll-target="#the-problem"><span class="header-section-number">1.0.0.1</span> The Problem</a></li>
   <li><a href="#the-solution" id="toc-the-solution" class="nav-link" data-scroll-target="#the-solution"><span class="header-section-number">1.0.0.2</span> The Solution</a></li>
   </ul></li>
-  <li><a href="#procedure" id="toc-procedure" class="nav-link" data-scroll-target="#procedure"><span class="header-section-number">2</span> Procedure</a>
+  <li><a href="#connection-procedure" id="toc-connection-procedure" class="nav-link" data-scroll-target="#connection-procedure"><span class="header-section-number">2</span> Connection Procedure</a>
   <ul>
   <li><a href="#prerequisite-usbadb-internet-setup" id="toc-prerequisite-usbadb-internet-setup" class="nav-link" data-scroll-target="#prerequisite-usbadb-internet-setup"><span class="header-section-number">2.1</span> Prerequisite USB/ADB &amp; Internet Setup</a>
   <ul>
@@ -72,11 +107,27 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#student-tvs-if-neccesary" id="toc-student-tvs-if-neccesary" class="nav-link" data-scroll-target="#student-tvs-if-neccesary"><span class="header-section-number">2.3.2</span> Student TVs (if neccesary)</a></li>
   </ul></li>
   <li><a href="#disabling-debug-access" id="toc-disabling-debug-access" class="nav-link" data-scroll-target="#disabling-debug-access"><span class="header-section-number">2.4</span> Disabling Debug Access</a></li>
+  <li><a href="#connection-is-complete" id="toc-connection-is-complete" class="nav-link" data-scroll-target="#connection-is-complete"><span class="header-section-number">2.5</span> Connection is Complete!</a></li>
   </ul></li>
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">3</span> Appendix</a>
   <ul>
-  <li><a href="#removing-the-network-configuration" id="toc-removing-the-network-configuration" class="nav-link" data-scroll-target="#removing-the-network-configuration"><span class="header-section-number">3.0.1</span> Removing the Network Configuration</a></li>
-  <li><a href="#changing-credentials-wip" id="toc-changing-credentials-wip" class="nav-link" data-scroll-target="#changing-credentials-wip"><span class="header-section-number">3.0.2</span> Changing Credentials (WIP)</a></li>
+  <li><a href="#using-the-application" id="toc-using-the-application" class="nav-link" data-scroll-target="#using-the-application"><span class="header-section-number">3.1</span> Using the Application</a>
+  <ul>
+  <li><a href="#removing-the-network-configuration" id="toc-removing-the-network-configuration" class="nav-link" data-scroll-target="#removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Removing the Network Configuration</a></li>
+  <li><a href="#changing-credentials" id="toc-changing-credentials" class="nav-link" data-scroll-target="#changing-credentials"><span class="header-section-number">3.1.2</span> Changing Credentials</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#compiling-the-application" id="toc-compiling-the-application" class="nav-link" data-scroll-target="#compiling-the-application"><span class="header-section-number">4</span> Compiling the Application</a>
+  <ul>
+  <li><a href="#setting-up-android-development-environment" id="toc-setting-up-android-development-environment" class="nav-link" data-scroll-target="#setting-up-android-development-environment"><span class="header-section-number">4.0.1</span> Setting Up Android Development Environment</a></li>
+  <li><a href="#install-java-development-kit-jdk" id="toc-install-java-development-kit-jdk" class="nav-link" data-scroll-target="#install-java-development-kit-jdk"><span class="header-section-number">4.0.2</span> Install Java Development Kit (JDK)</a></li>
+  <li><a href="#install-android-command-line-tools" id="toc-install-android-command-line-tools" class="nav-link" data-scroll-target="#install-android-command-line-tools"><span class="header-section-number">4.0.3</span> Install Android Command Line Tools</a></li>
+  <li><a href="#install-required-sdk-components" id="toc-install-required-sdk-components" class="nav-link" data-scroll-target="#install-required-sdk-components"><span class="header-section-number">4.0.4</span> Install Required SDK Components</a></li>
+  <li><a href="#set-environment-variable" id="toc-set-environment-variable" class="nav-link" data-scroll-target="#set-environment-variable"><span class="header-section-number">4.0.5</span> Set Environment Variable</a></li>
+  <li><a href="#clone-the-project" id="toc-clone-the-project" class="nav-link" data-scroll-target="#clone-the-project"><span class="header-section-number">4.0.6</span> Clone the Project</a></li>
+  <li><a href="#compile-the-application" id="toc-compile-the-application" class="nav-link" data-scroll-target="#compile-the-application"><span class="header-section-number">4.0.7</span> Compile the Application</a></li>
+  <li><a href="#finding-your-compiled-app" id="toc-finding-your-compiled-app" class="nav-link" data-scroll-target="#finding-your-compiled-app"><span class="header-section-number">4.0.8</span> Finding Your Compiled App</a></li>
+  <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting"><span class="header-section-number">4.0.9</span> Troubleshooting</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -96,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 3, 2025</p>
+      <p class="date">November 10, 2025</p>
     </div>
   </div>
   
@@ -109,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="version-info">
-<p>Last updated November 3, 2025.</p>
+<p>Last updated November 10, 2025.</p>
 </div>
 <section id="general-overview" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General Overview</h1>
@@ -128,8 +179,8 @@ ul.task-list li input[type="checkbox"] {
 <hr>
 </section>
 </section>
-<section id="procedure" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Procedure</h1>
+<section id="connection-procedure" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Connection Procedure</h1>
 <section id="prerequisite-usbadb-internet-setup" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="prerequisite-usbadb-internet-setup"><span class="header-section-number">2.1</span> Prerequisite USB/ADB &amp; Internet Setup</h2>
 <blockquote class="blockquote">
@@ -241,34 +292,126 @@ ul.task-list li input[type="checkbox"] {
 <li>Disable <strong>USB debugging</strong>, and scroll to the top and disable <strong>Enable developer options</strong></li>
 <li>When you exit out this menu, the developer options menu should be gone.</li>
 </ol>
-<blockquote class="blockquote">
-<p><mark>You’re done!</mark> The wifi connection should be working fine now.</p>
-</blockquote>
+</section>
+<section id="connection-is-complete" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="connection-is-complete"><span class="header-section-number">2.5</span> Connection is Complete!</h2>
+<p><mark>You’re done!</mark> The wifi connection should be working fine now. The rest of the instructions should not be needed if you are <em>just</em> connecting a TV to the internet.</p>
 </section>
 </section>
 <section id="appendix" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Appendix</h1>
-<section id="removing-the-network-configuration" class="level3" data-number="3.0.1">
-<h3 data-number="3.0.1" class="anchored" data-anchor-id="removing-the-network-configuration"><span class="header-section-number">3.0.1</span> Removing the Network Configuration</h3>
-<ol type="1">
-<li>To remove the saved network configuration, you must find the application in the apps menu and uninstall it.</li>
-</ol>
+<section id="using-the-application" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="using-the-application"><span class="header-section-number">3.1</span> Using the Application</h2>
+<section id="removing-the-network-configuration" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Removing the Network Configuration</h3>
+<ul>
+<li>Option 1: Use the <strong>Disconnect</strong> button inside the application.</li>
+<li>Option 2: Uninstall the application.</li>
+</ul>
+</section>
+<section id="changing-credentials" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="changing-credentials"><span class="header-section-number">3.1.2</span> Changing Credentials</h3>
+<ul>
+<li>To change credentials, modify the file in <code>app/src/res/raw/preset_config.json</code> OR create a new file at <code>app/src/res/raw/preset_config.json</code> based on <code>preset_config.json_example</code> at root dir.</li>
+<li>Recompilation will be required in order to create a new APK to install the new credentials. Follow above. instructions</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="compiling-the-application" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Compiling the Application</h1>
+<p>The application is stored in a GitHub repository at <a href="https://github.com/SmatMan/Enterprise-WiFi">https://github.com/SmatMan/Enterprise-WiFi</a>. In order to compile the application, you must install and setup some prerequisites for Android application development.</p>
+<section id="setting-up-android-development-environment" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="setting-up-android-development-environment"><span class="header-section-number">4.0.1</span> Setting Up Android Development Environment</h3>
 <blockquote class="blockquote">
-<p>You won’t be able to disconnect or forget the network from the settings page like you normally would.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Eventually a “Disconnect” button will be implemented inside the app. Once it’s finished, press it to disconnect the TV from wifi.</p>
+<p>In order to compile the application yourself, you need to install Android development tools on your computer. You only need the bare minimum to compile the app, not the full Android Studio IDE.</p>
 </blockquote>
 </section>
-<section id="changing-credentials-wip" class="level3" data-number="3.0.2">
-<h3 data-number="3.0.2" class="anchored" data-anchor-id="changing-credentials-wip"><span class="header-section-number">3.0.2</span> Changing Credentials (WIP)</h3>
+<section id="install-java-development-kit-jdk" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="install-java-development-kit-jdk"><span class="header-section-number">4.0.2</span> Install Java Development Kit (JDK)</h3>
+<p>The Android build tools require Java to run.</p>
+<ol type="1">
+<li><p>Check if Java is already installed by opening Terminal and running:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>If Java is not installed, download and install the JDK:</p>
 <ul>
-<li><p>To change credentials, modify the file in <code>app/src/res/raw/preset_config.json</code> / create a new file at <code>app/src/res/raw/preset_config.json</code> based on <code>preset_config.json_example</code> at root dir.</p></li>
-<li><p>Recompilation will be required in order to create a new APK to install the new credentials. Follow below instructions</p></li>
-<li><p>Set environment variable <code>ANDROID_HOME</code> to location of Android Development SDK (will expand)</p></li>
-<li><p>Run <code>./gradlew assembleDebug</code>.</p></li>
-<li><p>The compiled APK will be available in <code>app/build/outputs/apk/debug/app-debug.apk</code></p></li>
-</ul>
+<li>Visit <a href="https://adoptium.net/">https://adoptium.net/</a></li>
+<li>Download <strong>Temurin 17 (LTS)</strong> for your system (likely Linux for the ResNet laptop)</li>
+<li>Run the installer and follow the prompts</li>
+</ul></li>
+</ol>
+</section>
+<section id="install-android-command-line-tools" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="install-android-command-line-tools"><span class="header-section-number">4.0.3</span> Install Android Command Line Tools</h3>
+<p>You only need the command line tools, not the full Android Studio application.</p>
+<ol type="1">
+<li><p>Visit <a href="https://developer.android.com/studio#command-line-tools-only">https://developer.android.com/studio#command-line-tools-only</a></p></li>
+<li><p>Download the <strong>Command line tools only</strong> for Mac</p></li>
+<li><p>Create a folder to store Android tools:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/Library/Android/sdk/cmdline-tools</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Unzip the downloaded file and move it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Downloads</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> commandlinetools-mac-<span class="pp">*</span>.zip</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> cmdline-tools ~/Library/Android/sdk/cmdline-tools/latest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+</section>
+<section id="install-required-sdk-components" class="level3" data-number="4.0.4">
+<h3 data-number="4.0.4" class="anchored" data-anchor-id="install-required-sdk-components"><span class="header-section-number">4.0.4</span> Install Required SDK Components</h3>
+<p>The build process needs specific Android SDK packages.</p>
+<ol type="1">
+<li><p>Open Terminal and run the following commands to install the required packages:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Library/Android/sdk/cmdline-tools/latest/bin</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./sdkmanager</span> <span class="st">"platform-tools"</span> <span class="st">"platforms;android-34"</span> <span class="st">"build-tools;34.0.0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Accept the license agreements when prompted (type ‘y’ and press Enter)</p></li>
+</ol>
+</section>
+<section id="set-environment-variable" class="level3" data-number="4.0.5">
+<h3 data-number="4.0.5" class="anchored" data-anchor-id="set-environment-variable"><span class="header-section-number">4.0.5</span> Set Environment Variable</h3>
+<p>The build script needs to know where your Android SDK is located.</p>
+<ol type="1">
+<li><p>Open Terminal and edit your shell configuration file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Add this line at the end of the file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ANDROID_HOME</span><span class="op">=</span><span class="st">"</span><span class="va">$HOME</span><span class="st">/Library/Android/sdk"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Save the file (press Control+X, then Y, then Enter)</p></li>
+<li><p>Apply the changes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Verify it worked:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$ANDROID_HOME</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You should see: <code>/Users/your_username/Library/Android/sdk</code></p></li>
+</ol>
+</section>
+<section id="clone-the-project" class="level3" data-number="4.0.6">
+<h3 data-number="4.0.6" class="anchored" data-anchor-id="clone-the-project"><span class="header-section-number">4.0.6</span> Clone the Project</h3>
+<ol type="1">
+<li>Open your terminal and <code>cd</code> to a convenient location where you would like to keep the application code.</li>
+<li>Run <code>git clone https://github.com/SmatMan/Enterprise-WiFi</code> to download the code.</li>
+</ol>
+</section>
+<section id="compile-the-application" class="level3" data-number="4.0.7">
+<h3 data-number="4.0.7" class="anchored" data-anchor-id="compile-the-application"><span class="header-section-number">4.0.7</span> Compile the Application</h3>
+<p>Now you’re ready to build the app!</p>
+<ol type="1">
+<li><p>Open Terminal and navigate to the project folder with <code>cd</code>.</p></li>
+<li><p>Make the build script executable (only needed once):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x ./gradlew</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Run the build command:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./gradlew</span> assembleDebug</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Wait for the build to complete. You’ll see “BUILD SUCCESSFUL” when done.</p></li>
+</ol>
+</section>
+<section id="finding-your-compiled-app" class="level3" data-number="4.0.8">
+<h3 data-number="4.0.8" class="anchored" data-anchor-id="finding-your-compiled-app"><span class="header-section-number">4.0.8</span> Finding Your Compiled App</h3>
+<p>The compiled APK file will be located at:</p>
+<pre><code>app/build/outputs/apk/debug/app-debug.apk</code></pre>
+<p>The file <code>app-debug.apk</code> is what you’ll install on the TV using the <code>adb install</code> command from the main procedure.</p>
+<hr>
+</section>
+<section id="troubleshooting" class="level3" data-number="4.0.9">
+<h3 data-number="4.0.9" class="anchored" data-anchor-id="troubleshooting"><span class="header-section-number">4.0.9</span> Troubleshooting</h3>
+<p><strong>If the build fails with “SDK location not found”:</strong> - Make sure you set the <code>ANDROID_HOME</code> environment variable correctly - Try closing and reopening Terminal</p>
+<p><strong>If the build fails with “License not accepted”:</strong> - Run the sdkmanager command again and make sure to type ‘y’ to accept licenses</p>
+<p><strong>If you get “Permission denied” errors:</strong> - Run <code>chmod +x ./gradlew</code> to make the build script executable</p>
 </section>
 </section>
 

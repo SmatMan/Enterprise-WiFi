@@ -36,7 +36,7 @@ Last updated {{< meta date >}}.
 
 <hr>
 
-# Procedure
+# Connection Procedure
 
 ## Prerequisite USB/ADB & Internet Setup
 
@@ -111,25 +111,140 @@ Last updated {{< meta date >}}.
 2. Disable **USB debugging**, and scroll to the top and disable **Enable developer options**
 3. When you exit out this menu, the developer options menu should be gone.
 
-> [You're done!]{.mark} The wifi connection should be working fine now.
+## Connection is Complete!
+[You're done!]{.mark} The wifi connection should be working fine now. The rest of the instructions should not be needed if you are *just* connecting a TV to the internet.
 
 # Appendix
 
+## Using the Application
+
 ### Removing the Network Configuration
-1. To remove the saved network configuration, you must find the application in the apps menu and uninstall it.
-
-> You won't be able to disconnect or forget the network from the settings page like you normally would.
-
-> Eventually a "Disconnect" button will be implemented inside the app. Once it's finished, press it to disconnect the TV from wifi.
+- Option 1: Use the **Disconnect** button inside the application.
+- Option 2: Uninstall the application.
 
 
 
-### Changing Credentials (WIP)
+### Changing Credentials
 
-- To change credentials, modify the file in `app/src/res/raw/preset_config.json` / create a new file at `app/src/res/raw/preset_config.json` based on `preset_config.json_example` at root dir.
-- Recompilation will be required in order to create a new APK to install the new credentials. Follow below instructions
+- To change credentials, modify the file in `app/src/res/raw/preset_config.json` OR create a new file at `app/src/res/raw/preset_config.json` based on `preset_config.json_example` at root dir.
+- Recompilation will be required in order to create a new APK to install the new credentials. Follow above. instructions
 
-- Set environment variable `ANDROID_HOME` to location of Android Development SDK (will expand)
-- Run `./gradlew assembleDebug`.
-- The compiled APK will be available in `app/build/outputs/apk/debug/app-debug.apk`
+
+
+
+# Compiling the Application
+
+The application is stored in a GitHub repository at [https://github.com/SmatMan/Enterprise-WiFi](https://github.com/SmatMan/Enterprise-WiFi). In order to compile the application, you must install and setup some prerequisites for Android application development.
+
+### Setting Up Android Development Environment
+
+> In order to compile the application yourself, you need to install Android development tools on your computer. You only need the bare minimum to compile the app, not the full Android Studio IDE.
+
+### Install Java Development Kit (JDK)
+
+The Android build tools require Java to run.
+
+1. Check if Java is already installed by opening Terminal and running:
+   ```bash
+   java --version
+   ```
+2. If Java is not installed, download and install the JDK:
+   - Visit [https://adoptium.net/](https://adoptium.net/)
+   - Download **Temurin 17 (LTS)** for your system (likely Linux for the ResNet laptop)
+   - Run the installer and follow the prompts
+
+### Install Android Command Line Tools
+
+You only need the command line tools, not the full Android Studio application.
+
+1. Visit [https://developer.android.com/studio#command-line-tools-only](https://developer.android.com/studio#command-line-tools-only)
+2. Download the **Command line tools only** for Mac
+3. Create a folder to store Android tools:
+   ```bash
+   mkdir -p ~/Library/Android/sdk/cmdline-tools
+   ```
+4. Unzip the downloaded file and move it:
+   ```bash
+   cd ~/Downloads
+   unzip commandlinetools-mac-*.zip
+   mv cmdline-tools ~/Library/Android/sdk/cmdline-tools/latest
+   ```
+
+### Install Required SDK Components
+
+The build process needs specific Android SDK packages.
+
+1. Open Terminal and run the following commands to install the required packages:
+   ```bash
+   cd ~/Library/Android/sdk/cmdline-tools/latest/bin
+   ./sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+   ```
+2. Accept the license agreements when prompted (type 'y' and press Enter)
+
+### Set Environment Variable
+
+The build script needs to know where your Android SDK is located.
+
+1. Open Terminal and edit your shell configuration file:
+   ```bash
+   nano ~/.bashrc
+   ```
+2. Add this line at the end of the file:
+   ```bash
+   export ANDROID_HOME="$HOME/Library/Android/sdk"
+   ```
+3. Save the file (press Control+X, then Y, then Enter)
+4. Apply the changes:
+   ```bash
+   source ~/.bashrc
+   ```
+5. Verify it worked:
+   ```bash
+   echo $ANDROID_HOME
+   ```
+   You should see: `/Users/your_username/Library/Android/sdk`
+
+### Clone the Project
+
+1. Open your terminal and `cd` to a convenient location where you would like to keep the application code.
+2. Run `git clone https://github.com/SmatMan/Enterprise-WiFi` to download the code.
+
+### Compile the Application
+
+Now you're ready to build the app!
+
+1. Open Terminal and navigate to the project folder with `cd`.
+2. Make the build script executable (only needed once):
+   ```bash
+   chmod +x ./gradlew
+   ```
+3. Run the build command:
+   ```bash
+   ./gradlew assembleDebug
+   ```
+4. Wait for the build to complete. You'll see "BUILD SUCCESSFUL" when done.
+
+### Finding Your Compiled App
+
+The compiled APK file will be located at:
+```
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+
+The file `app-debug.apk` is what you'll install on the TV using the `adb install` command from the main procedure.
+
+---
+
+### Troubleshooting
+
+**If the build fails with "SDK location not found":**
+- Make sure you set the `ANDROID_HOME` environment variable correctly
+- Try closing and reopening Terminal
+
+**If the build fails with "License not accepted":**
+- Run the sdkmanager command again and make sure to type 'y' to accept licenses
+
+**If you get "Permission denied" errors:**
+- Run `chmod +x ./gradlew` to make the build script executable
 
