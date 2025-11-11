@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-11-10">
+<meta name="dcterms.date" content="2025-11-11">
 
 <title>Oak House TV Wi-Fi Procedure</title>
 <style>
@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>
    .version-info {
       font-size: 70%;
@@ -101,23 +101,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#temporary-internet-connection" id="toc-temporary-internet-connection" class="nav-link" data-scroll-target="#temporary-internet-connection"><span class="header-section-number">2.1.1</span> Temporary Internet Connection</a></li>
   </ul></li>
   <li><a href="#installing-the-app-onto-the-tv" id="toc-installing-the-app-onto-the-tv" class="nav-link" data-scroll-target="#installing-the-app-onto-the-tv"><span class="header-section-number">2.2</span> Installing the App onto the TV</a></li>
-  <li><a href="#connecting-to-the-network" id="toc-connecting-to-the-network" class="nav-link" data-scroll-target="#connecting-to-the-network"><span class="header-section-number">2.3</span> Connecting to the Network</a>
+  <li><a href="#sec-disable-adb" id="toc-sec-disable-adb" class="nav-link" data-scroll-target="#sec-disable-adb"><span class="header-section-number">2.3</span> Disabling Debug Access</a></li>
+  <li><a href="#sec-setup-procedure" id="toc-sec-setup-procedure" class="nav-link" data-scroll-target="#sec-setup-procedure"><span class="header-section-number">2.4</span> Connecting to the Network</a>
   <ul>
-  <li><a href="#common-room-tvs" id="toc-common-room-tvs" class="nav-link" data-scroll-target="#common-room-tvs"><span class="header-section-number">2.3.1</span> Common Room TVs</a></li>
-  <li><a href="#student-tvs-if-neccesary" id="toc-student-tvs-if-neccesary" class="nav-link" data-scroll-target="#student-tvs-if-neccesary"><span class="header-section-number">2.3.2</span> Student TVs (if neccesary)</a></li>
+  <li><a href="#student-tvs-no-preset-wifi.apk" id="toc-student-tvs-no-preset-wifi.apk" class="nav-link" data-scroll-target="#student-tvs-no-preset-wifi.apk"><span class="header-section-number">2.4.1</span> Student TVs (<code>no-preset-wifi.apk</code>)</a></li>
+  <li><a href="#common-room-tvs-preset-wifi.apk" id="toc-common-room-tvs-preset-wifi.apk" class="nav-link" data-scroll-target="#common-room-tvs-preset-wifi.apk"><span class="header-section-number">2.4.2</span> Common Room TVs (<code>preset-wifi.apk</code>)</a></li>
   </ul></li>
-  <li><a href="#disabling-debug-access" id="toc-disabling-debug-access" class="nav-link" data-scroll-target="#disabling-debug-access"><span class="header-section-number">2.4</span> Disabling Debug Access</a></li>
   <li><a href="#connection-is-complete" id="toc-connection-is-complete" class="nav-link" data-scroll-target="#connection-is-complete"><span class="header-section-number">2.5</span> Connection is Complete!</a></li>
   </ul></li>
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">3</span> Appendix</a>
   <ul>
   <li><a href="#using-the-application" id="toc-using-the-application" class="nav-link" data-scroll-target="#using-the-application"><span class="header-section-number">3.1</span> Using the Application</a>
   <ul>
-  <li><a href="#removing-the-network-configuration" id="toc-removing-the-network-configuration" class="nav-link" data-scroll-target="#removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Removing the Network Configuration</a></li>
+  <li><a href="#disconnecting-removing-the-network-configuration" id="toc-disconnecting-removing-the-network-configuration" class="nav-link" data-scroll-target="#disconnecting-removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Disconnecting / Removing the Network Configuration</a></li>
   <li><a href="#changing-credentials" id="toc-changing-credentials" class="nav-link" data-scroll-target="#changing-credentials"><span class="header-section-number">3.1.2</span> Changing Credentials</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#compiling-the-application" id="toc-compiling-the-application" class="nav-link" data-scroll-target="#compiling-the-application"><span class="header-section-number">4</span> Compiling the Application</a>
+  <li><a href="#sec-compilation" id="toc-sec-compilation" class="nav-link" data-scroll-target="#sec-compilation"><span class="header-section-number">4</span> Compiling the Application</a>
   <ul>
   <li><a href="#setting-up-android-development-environment" id="toc-setting-up-android-development-environment" class="nav-link" data-scroll-target="#setting-up-android-development-environment"><span class="header-section-number">4.0.1</span> Setting Up Android Development Environment</a></li>
   <li><a href="#install-java-development-kit-jdk" id="toc-install-java-development-kit-jdk" class="nav-link" data-scroll-target="#install-java-development-kit-jdk"><span class="header-section-number">4.0.2</span> Install Java Development Kit (JDK)</a></li>
@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 10, 2025</p>
+      <p class="date">November 11, 2025</p>
     </div>
   </div>
   
@@ -160,7 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="version-info">
-<p>Last updated November 10, 2025.</p>
+<p>Last updated November 11, 2025.</p>
 </div>
 <section id="general-overview" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General Overview</h1>
@@ -181,6 +181,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="connection-procedure" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Connection Procedure</h1>
+<p>The following procedure explains the network setup using this application on Oak House TVs.</p>
+<p>If the application is already installed on the TV, you may skip to <a href="#sec-setup-procedure" class="quarto-xref">Section&nbsp;2.4</a></p>
 <section id="prerequisite-usbadb-internet-setup" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="prerequisite-usbadb-internet-setup"><span class="header-section-number">2.1</span> Prerequisite USB/ADB &amp; Internet Setup</h2>
 <blockquote class="blockquote">
@@ -206,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <blockquote class="blockquote">
-<p>We will need to remember to disable this later!!</p>
+<p><mark>We will need to remember to disable this later in <a href="#sec-disable-adb" class="quarto-xref">Section&nbsp;2.3</a>!!</mark></p>
 </blockquote>
 <hr>
 <section id="temporary-internet-connection" class="level3" data-number="2.1.1">
@@ -218,20 +220,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The current way I have been doing this is using the blueish router in the drawer.</p>
 </blockquote>
 <ol type="1">
-<li>Plug the GLinet router into the wall with its associated plug. Use an ethernet cable from the laptop bag (or any other ethernet cable) to connect either port from the back of the router to the ethernet port on the side of the TV.</li>
-<li>Wait a minute or two for the router’s light to stop flashing, indicating its done starting up.</li>
-<li>Connect the laptop to the wifi network beginning with <code>GLinet</code> and ending with <code>5G</code>.
+<li><p>Plug the GLinet router into the wall outlet with its associated plug. Use an ethernet cable from the laptop bag (or any other ethernet cable) to connect either port from the back of the router to the ethernet port on the side of the TV.</p></li>
+<li><p>Wait a minute or two for the router’s light to stop flashing, indicating it’s done starting up.</p></li>
+<li><p>Connect the ResNet laptop to the <strong>wifi network</strong> beginning with <code>GLinet</code> and ending with <code>5G</code>.</p>
 <ul>
-<li>If at any point the <code>adb</code> commands fail, it’s very likely the laptop disconnected from the router and is back on the UofT/eduroam network.</li>
+<li><u><strong>NOTE FOR LATER STEPS:</strong></u> If at any point the <code>adb</code> commands fail, it’s very likely the laptop disconnected from the router and is back on the UofT/eduroam network.</li>
 </ul></li>
-<li>Identify the temporary IP address of the TV in <strong>Settings</strong> -&gt; <strong>Network and Internet</strong></li>
+<li><p>Identify the temporary IP address of the TV in <strong>Settings</strong> -&gt; <strong>Network and Internet</strong>.</p>
+<ul>
+<li>Note down this IP address somewhere. This is not a permanant address, and is only applicable when the TV is temporarily wired to the router.</li>
+</ul></li>
 </ol>
 </section>
 </section>
 <section id="installing-the-app-onto-the-tv" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="installing-the-app-onto-the-tv"><span class="header-section-number">2.2</span> Installing the App onto the TV</h2>
 <blockquote class="blockquote">
-<p>There are <strong>TWO</strong> versions of the application you can install on the TV. <code>preset-wifi.apk</code> and <code>no-preset-wifi.apk</code>. The preset version includes the private credentials used to connect only the <strong>Common Room TVs</strong> to the wifi. Do not install the <code>preset-wifi.apk</code> file on any student TVs. Instead, use <code>no-preset-wifi.apk</code>.</p>
+<p>There are <strong>TWO</strong> versions of the application you can install on the TV. <code>preset-wifi.apk</code> and <code>no-preset-wifi.apk</code>. The preset version includes the private credentials used to connect only the <strong>Common Room TVs</strong> to the wifi. <strong>Do not</strong> install the <code>preset-wifi.apk</code> file on any student TVs. Instead, use <code>no-preset-wifi.apk</code>.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><mark>For <strong>STUDENT TVs</strong> use <code>no-preset-wifi.apk</code>.</mark></p>
 </blockquote>
 <ol type="1">
 <li><p>On the laptop, open the terminal, type <code>adb connect IP_ADDRESS</code>, where <code>IP_ADDRESS</code> is replaced by the IP you gathered earlier, and hit the Enter key.</p></li>
@@ -255,55 +263,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>preset-wifi.apk</code> - ONLY for Common Room TVs. Includes special wifi credentials inside the app.</li>
 <li><code>no-preset-wifi.apk</code> - for Student TVs, requires a network name, username, and password to be inputted to connect the TV.</li>
 </ul></li>
-<li>On the laptop, run either <code>adb install preset-wifi.apk</code> or <code>adb install no-preset-wifi.apk</code> depending on your choice to send the application to the TV.</li>
+<li>On the laptop, run either <code>adb install preset-wifi.apk</code> or <code>adb install no-preset-wifi.apk</code>, depending on your choice. This command installs the application onto the TV.</li>
 </ol>
 </section>
-<section id="connecting-to-the-network" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="connecting-to-the-network"><span class="header-section-number">2.3</span> Connecting to the Network</h2>
-<ol type="1">
-<li>Once the app is installed, unplug the ethernet connection to the TV.</li>
-<li>Navigate to the applications menu on the TV, and launch “Enterprise Wi-Fi for TVs”.
-<ul>
-<li>The app on first launch will prompt for location access, this should be allowed. If you press no, you will have to uninstall, and reinstall the application to try again.</li>
-</ul></li>
-</ol>
-<section id="common-room-tvs" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="common-room-tvs"><span class="header-section-number">2.3.1</span> Common Room TVs</h3>
-<ol type="1">
-<li>Scroll down inside the application to the <strong>Connect To Preset</strong> button, and select it. A popup should appear asking to connect to a Wi-Fi networks suggested by Enterprise Wifi. Press yes.</li>
-<li>Navigate to <strong>Settings</strong> to confirm the connection. If it hasn’t connected, go to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Restart</strong> and it should be connected after the restart.</li>
-</ol>
-</section>
-<section id="student-tvs-if-neccesary" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="student-tvs-if-neccesary"><span class="header-section-number">2.3.2</span> Student TVs (if neccesary)</h3>
-<ol type="1">
-<li><p>Type the network details into the app that the student would use to connect their regular computer to the wifi. Select <code>PEAP</code> and <code>MSCHAPv2</code> for the other options.</p></li>
-<li><p>Navigate to <strong>Settings</strong> to confirm the connection. If it hasn’t connected, go to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Restart</strong> and it should be connected after the restart.</p></li>
-</ol>
-</section>
-</section>
-<section id="disabling-debug-access" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="disabling-debug-access"><span class="header-section-number">2.4</span> Disabling Debug Access</h2>
+<section id="sec-disable-adb" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-disable-adb"><span class="header-section-number">2.3</span> Disabling Debug Access</h2>
 <blockquote class="blockquote">
 <p>Now that the application is installed and the network has been connected, we need to disable ADB access.</p>
 </blockquote>
 <ol type="1">
-<li>Navigate to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Developer options</strong>.</li>
-<li>Disable <strong>USB debugging</strong>, and scroll to the top and disable <strong>Enable developer options</strong></li>
-<li>When you exit out this menu, the developer options menu should be gone.</li>
+<li><p>Navigate to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Developer options</strong>.</p></li>
+<li><p>Disable <strong>USB debugging</strong>, and scroll to the top and disable <strong>Enable developer options</strong></p></li>
+<li><p>When you exit out this menu, the developer options menu should be gone.</p></li>
 </ol>
+</section>
+<section id="sec-setup-procedure" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-setup-procedure"><span class="header-section-number">2.4</span> Connecting to the Network</h2>
+<ol type="1">
+<li><p>Once the app is installed, unplug the ethernet connection to the TV.</p></li>
+<li><p>Navigate to the applications menu on the TV, and launch “Enterprise Wi-Fi for TVs”.</p>
+<ul>
+<li>The app on first launch will prompt for location access, this should be allowed. If you press no, you will have to uninstall, and reinstall the application to try again.</li>
+</ul></li>
+<li><p>Next, follow the applicable section for</p></li>
+</ol>
+<section id="student-tvs-no-preset-wifi.apk" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="student-tvs-no-preset-wifi.apk"><span class="header-section-number">2.4.1</span> Student TVs (<code>no-preset-wifi.apk</code>)</h3>
+<ol type="1">
+<li><p>Instruct the student to type their UTORid into the <code>UTORid</code> field, and their password into the <code>Password</code> field.</p></li>
+<li><p>Hit <strong>Connect</strong> when done. A popup should eventually appear asking to connect to a Wi-Fi networks suggested by Enterprise Wifi. Press <strong>Yes</strong>.</p></li>
+<li><p>Navigate to <strong>Settings</strong> to confirm the connection. If it hasn’t connected, go to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Restart</strong> and it should be connected after the restart.</p></li>
+</ol>
+</section>
+<section id="common-room-tvs-preset-wifi.apk" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="common-room-tvs-preset-wifi.apk"><span class="header-section-number">2.4.2</span> Common Room TVs (<code>preset-wifi.apk</code>)</h3>
+<ol type="1">
+<li><p>Scroll down inside the application to the <strong>Connect To Preset</strong> button, and select it. A popup should appear asking to <em>“Connect to Wi-Fi networks suggested by Enterprise Wifi”</em>. Press yes.</p></li>
+<li><p>Navigate to <strong>Settings</strong> to confirm the connection. If it hasn’t connected, go to <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>Restart</strong> and it should be connected after the restart.</p></li>
+</ol>
+</section>
 </section>
 <section id="connection-is-complete" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="connection-is-complete"><span class="header-section-number">2.5</span> Connection is Complete!</h2>
-<p><mark>You’re done!</mark> The wifi connection should be working fine now. The rest of the instructions should not be needed if you are <em>just</em> connecting a TV to the internet.</p>
+<p><mark>You’re done!</mark> The wifi connection should be working fine now. The rest of the instructions should not be needed if your goal is <em>just</em> to connect a TV to the internet.</p>
+<p><br><br> <br><br> <br><br></p>
+<hr>
 </section>
 </section>
 <section id="appendix" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Appendix</h1>
 <section id="using-the-application" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="using-the-application"><span class="header-section-number">3.1</span> Using the Application</h2>
-<section id="removing-the-network-configuration" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Removing the Network Configuration</h3>
+<section id="disconnecting-removing-the-network-configuration" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="disconnecting-removing-the-network-configuration"><span class="header-section-number">3.1.1</span> Disconnecting / Removing the Network Configuration</h3>
 <ul>
 <li>Option 1: Use the <strong>Disconnect</strong> button inside the application.</li>
 <li>Option 2: Uninstall the application.</li>
@@ -313,12 +325,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="changing-credentials"><span class="header-section-number">3.1.2</span> Changing Credentials</h3>
 <ul>
 <li>To change credentials, modify the file in <code>app/src/res/raw/preset_config.json</code> OR create a new file at <code>app/src/res/raw/preset_config.json</code> based on <code>preset_config.json_example</code> at root dir.</li>
-<li>Recompilation will be required in order to create a new APK to install the new credentials. Follow above. instructions</li>
+<li>Recompilation will be required in order to create a new APK to install the new credentials. Follow the instructions in <a href="#sec-compilation" class="quarto-xref">Section&nbsp;4</a></li>
 </ul>
 </section>
 </section>
 </section>
-<section id="compiling-the-application" class="level1" data-number="4">
+<section id="sec-compilation" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Compiling the Application</h1>
 <p>The application is stored in a GitHub repository at <a href="https://github.com/SmatMan/Enterprise-WiFi">https://github.com/SmatMan/Enterprise-WiFi</a>. In order to compile the application, you must install and setup some prerequisites for Android application development.</p>
 <section id="setting-up-android-development-environment" class="level3" data-number="4.0.1">
@@ -346,12 +358,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You only need the command line tools, not the full Android Studio application.</p>
 <ol type="1">
 <li><p>Visit <a href="https://developer.android.com/studio#command-line-tools-only">https://developer.android.com/studio#command-line-tools-only</a></p></li>
-<li><p>Download the <strong>Command line tools only</strong> for Mac</p></li>
+<li><p>Download the <strong>Command line tools only</strong> for your platform</p></li>
 <li><p>Create a folder to store Android tools:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/Library/Android/sdk/cmdline-tools</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Unzip the downloaded file and move it:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Downloads</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> commandlinetools-mac-<span class="pp">*</span>.zip</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> commandlinetools<span class="pp">*</span>.zip</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> cmdline-tools ~/Library/Android/sdk/cmdline-tools/latest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>

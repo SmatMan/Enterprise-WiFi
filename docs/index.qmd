@@ -38,6 +38,10 @@ Last updated {{< meta date >}}.
 
 # Connection Procedure
 
+The following procedure explains the network setup using this application on Oak House TVs.
+
+If the application is already installed on the TV, you may skip to @sec-setup-procedure
+
 ## Prerequisite USB/ADB & Internet Setup
 
 > In order to install the application, we need to temporarily enable developer access on the TV. Developer access allows us to install apps on the TV from outside the Google Play store through a computer
@@ -53,7 +57,7 @@ Last updated {{< meta date >}}.
 
 ![USB Debugging](img/debugging.jpg){width=300 fig-align="left"}
 
-> We will need to remember to disable this later!!
+> [We will need to remember to disable this later in @sec-disable-adb!!]{.mark}
 
 ---
 
@@ -63,15 +67,19 @@ Last updated {{< meta date >}}.
 
 > The current way I have been doing this is using the blueish router in the drawer.
 
-1. Plug the GLinet router into the wall with its associated plug. Use an ethernet cable from the laptop bag (or any other ethernet cable) to connect either port from the back of the router to the ethernet port on the side of the TV.
-1. Wait a minute or two for the router's light to stop flashing, indicating its done starting up.
-1. Connect the laptop to the wifi network beginning with `GLinet` and ending with `5G`.
-   - If at any point the `adb` commands fail, it's very likely the laptop disconnected from the router and is back on the UofT/eduroam network.
-1. Identify the temporary IP address of the TV in **Settings** -> **Network and Internet**
+1. Plug the GLinet router into the wall outlet with its associated plug. Use an ethernet cable from the laptop bag (or any other ethernet cable) to connect either port from the back of the router to the ethernet port on the side of the TV.
+
+1. Wait a minute or two for the router's light to stop flashing, indicating it's done starting up.
+1. Connect the ResNet laptop to the **wifi network** beginning with `GLinet` and ending with `5G`.
+   - <u>**NOTE FOR LATER STEPS:**</u> If at any point the `adb` commands fail, it's very likely the laptop disconnected from the router and is back on the UofT/eduroam network.
+1. Identify the temporary IP address of the TV in **Settings** -> **Network and Internet**.
+   - Note down this IP address somewhere. This is not a permanant address, and is only applicable when the TV is temporarily wired to the router.
 
 ## Installing the App onto the TV
 
-> There are **TWO** versions of the application you can install on the TV. `preset-wifi.apk` and `no-preset-wifi.apk`. The preset version includes the private credentials used to connect only the **Common Room TVs** to the wifi. Do not install the `preset-wifi.apk` file on any student TVs. Instead, use `no-preset-wifi.apk`.
+> There are **TWO** versions of the application you can install on the TV. `preset-wifi.apk` and `no-preset-wifi.apk`. The preset version includes the private credentials used to connect only the **Common Room TVs** to the wifi. **Do not** install the `preset-wifi.apk` file on any student TVs. Instead, use `no-preset-wifi.apk`.
+
+> [For **STUDENT TVs** use `no-preset-wifi.apk`.]{.mark}
 
 1. On the laptop, open the terminal, type `adb connect IP_ADDRESS`, where `IP_ADDRESS` is replaced by the IP you gathered earlier, and hit the Enter key.
 1. On the TV, a prompt will appear asking to confirm the debugging connection. Allow this.
@@ -85,40 +93,55 @@ Last updated {{< meta date >}}.
 1. Decide which version of the app you need to install.
    - `preset-wifi.apk` - ONLY for Common Room TVs. Includes special wifi credentials inside the app.
    - `no-preset-wifi.apk` - for Student TVs, requires a network name, username, and password to be inputted to connect the TV.
-1. On the laptop, run either `adb install preset-wifi.apk` or `adb install no-preset-wifi.apk` depending on your choice to send the application to the TV.
+1. On the laptop, run either `adb install preset-wifi.apk` or `adb install no-preset-wifi.apk`, depending on your choice. This command installs the application onto the TV.
 
-## Connecting to the Network
-
-1. Once the app is installed, unplug the ethernet connection to the TV.
-2. Navigate to the applications menu on the TV, and launch "Enterprise Wi-Fi for TVs".
-   - The app on first launch will prompt for location access, this should be allowed. If you press no, you will have to uninstall, and reinstall the application to try again.
-
-### Common Room TVs
-
-1. Scroll down inside the application to the **Connect To Preset** button, and select it. A popup should appear asking to connect to a Wi-Fi networks suggested by Enterprise Wifi. Press yes.
-2. Navigate to **Settings** to confirm the connection. If it hasn't connected, go to **Settings** -> **System** -> **Restart** and it should be connected after the restart.
-
-### Student TVs (if neccesary)
-1. Type the network details into the app that the student would use to connect their regular computer to the wifi. Select `PEAP` and `MSCHAPv2` for the other options.
-
-2. Navigate to **Settings** to confirm the connection. If it hasn't connected, go to **Settings** -> **System** -> **Restart** and it should be connected after the restart.
-
-## Disabling Debug Access
+## Disabling Debug Access {#sec-disable-adb}
 
 > Now that the application is installed and the network has been connected, we need to disable ADB access.
 
 1. Navigate to **Settings** -> **System** -> **Developer options**.
+
 2. Disable **USB debugging**, and scroll to the top and disable **Enable developer options**
 3. When you exit out this menu, the developer options menu should be gone.
 
+## Connecting to the Network {#sec-setup-procedure}
+
+1. Once the app is installed, unplug the ethernet connection to the TV.
+
+2. Navigate to the applications menu on the TV, and launch "Enterprise Wi-Fi for TVs".
+   - The app on first launch will prompt for location access, this should be allowed. If you press no, you will have to uninstall, and reinstall the application to try again.
+
+3. Next, follow the applicable section for 
+
+### Student TVs (`no-preset-wifi.apk`)
+1. Instruct the student to type their UTORid into the `UTORid` field, and their password into the `Password` field.
+
+2. Hit **Connect** when done. A popup should eventually appear asking to connect to a Wi-Fi networks suggested by Enterprise Wifi. Press **Yes**.
+
+2. Navigate to **Settings** to confirm the connection. If it hasn't connected, go to **Settings** -> **System** -> **Restart** and it should be connected after the restart.
+
+### Common Room TVs (`preset-wifi.apk`)
+
+1. Scroll down inside the application to the **Connect To Preset** button, and select it. A popup should appear asking to _"Connect to Wi-Fi networks suggested by Enterprise Wifi"_. Press yes.
+
+2. Navigate to **Settings** to confirm the connection. If it hasn't connected, go to **Settings** -> **System** -> **Restart** and it should be connected after the restart.
+
+
 ## Connection is Complete!
-[You're done!]{.mark} The wifi connection should be working fine now. The rest of the instructions should not be needed if you are *just* connecting a TV to the internet.
+[You're done!]{.mark} The wifi connection should be working fine now. The rest of the instructions should not be needed if your goal is *just* to connect a TV to the internet.
+
+
+<br><br>
+<br><br>
+<br><br>
+
+---
 
 # Appendix
 
 ## Using the Application
 
-### Removing the Network Configuration
+### Disconnecting / Removing the Network Configuration
 - Option 1: Use the **Disconnect** button inside the application.
 - Option 2: Uninstall the application.
 
@@ -127,12 +150,12 @@ Last updated {{< meta date >}}.
 ### Changing Credentials
 
 - To change credentials, modify the file in `app/src/res/raw/preset_config.json` OR create a new file at `app/src/res/raw/preset_config.json` based on `preset_config.json_example` at root dir.
-- Recompilation will be required in order to create a new APK to install the new credentials. Follow above. instructions
+- Recompilation will be required in order to create a new APK to install the new credentials. Follow the instructions in @sec-compilation
 
 
 
 
-# Compiling the Application
+# Compiling the Application {#sec-compilation}
 
 The application is stored in a GitHub repository at [https://github.com/SmatMan/Enterprise-WiFi](https://github.com/SmatMan/Enterprise-WiFi). In order to compile the application, you must install and setup some prerequisites for Android application development.
 
@@ -158,7 +181,7 @@ The Android build tools require Java to run.
 You only need the command line tools, not the full Android Studio application.
 
 1. Visit [https://developer.android.com/studio#command-line-tools-only](https://developer.android.com/studio#command-line-tools-only)
-2. Download the **Command line tools only** for Mac
+2. Download the **Command line tools only** for your platform
 3. Create a folder to store Android tools:
    ```bash
    mkdir -p ~/Library/Android/sdk/cmdline-tools
@@ -166,7 +189,7 @@ You only need the command line tools, not the full Android Studio application.
 4. Unzip the downloaded file and move it:
    ```bash
    cd ~/Downloads
-   unzip commandlinetools-mac-*.zip
+   unzip commandlinetools*.zip
    mv cmdline-tools ~/Library/Android/sdk/cmdline-tools/latest
    ```
 
