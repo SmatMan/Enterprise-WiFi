@@ -42,6 +42,10 @@ The following procedure explains the network setup using this application on Oak
 
 If the application is already installed on the TV, you may skip to @sec-setup-procedure
 
+You can find a brief video of the procedure [linked here](https://youtu.be/WGWFxFbF3KU).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WGWFxFbF3KU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Prerequisite USB/ADB & Internet Setup
 
 > In order to install the application, we need to temporarily enable developer access on the TV. Developer access allows us to install apps on the TV from outside the Google Play store through a computer
