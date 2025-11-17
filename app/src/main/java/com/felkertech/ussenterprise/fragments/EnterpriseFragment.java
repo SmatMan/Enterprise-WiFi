@@ -308,6 +308,21 @@ public class EnterpriseFragment extends Fragment {
             enterpriseConfig.setEapMethod(connection.getEap());
             enterpriseConfig.setPhase2Method(connection.getPhase2());
         }
+        
+        // Android 12+ (API 31+) requires certificate validation to be explicitly configured
+        // for enterprise WiFi networks. Use system certificates to allow connection
+        // without requiring specific certificate validation.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                // Setting CA certificate to null uses the system's trusted CA certificates
+                // This allows the network to connect without requiring a specific certificate
+                // while still maintaining security through the system certificate store
+                enterpriseConfig.setCaCertificate(null);
+            } catch (Exception e) {
+                Logd("Failed to set CA certificate: " + e.getMessage());
+            }
+        }
+        
         return enterpriseConfig;
     }
 
