@@ -311,14 +311,19 @@ public class EnterpriseFragment extends Fragment {
 
         // Android 12+ (API 31) requires certificate configuration for EAP methods
         // that use server certificates (PEAP, TLS, TTLS, UNAUTH_TLS).
-        // Setting CA certificate to null instructs the system to use the system's
-        // trusted CA certificate store for validation, which is the recommended
-        // approach for networks that don't require a specific CA certificate.
+        // We load system CA certificates to enable validation while allowing
+        // connection to any network with a valid certificate from a system-trusted CA.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
-                enterpriseConfig.setCaCertificate(null);
+                X509Certificate[] systemCerts = loadSystemCaCertificates();
+                if (systemCerts != null && systemCerts.length > 0) {
+                    enterpriseConfig.setCaCertificates(systemCerts);
+                    Logd("Loaded " + systemCerts.length + " system CA certificates for validation");
+                } else {
+                    Logd("Warning: No system CA certificates found");
+                }
             } catch (Exception e) {
-                Logd("Failed to set CA certificate: " + e.getMessage());
+                Logd("Failed to load system CA certificates: " + e.getMessage());
             }
         }
 
@@ -471,6 +476,29 @@ public class EnterpriseFragment extends Fragment {
             }
         } catch (Exception e) {
             Logd("Failed to find CA certificate: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private X509Certificate[] loadSystemCaCertificates() {
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+            ks.load(null);
+            java.util.Enumeration<String> aliases = ks.aliases();
+            List<X509Certificate> certificates = new ArrayList<>();
+            
+            while (aliases.hasMoreElements()) {
+                String alias = aliases.nextElement();
+                X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+                if (cert != null) {
+                    certificates.add(cert);
+                }
+            }
+            
+            return certificates.toArray(new X509Certificate[0]);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to load system CA certificates", e);
+            Logd("Failed to load system CA certificates: " + e.getMessage());
         }
         return null;
     }
