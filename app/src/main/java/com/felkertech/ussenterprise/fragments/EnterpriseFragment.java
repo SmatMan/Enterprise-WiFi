@@ -308,6 +308,20 @@ public class EnterpriseFragment extends Fragment {
             enterpriseConfig.setEapMethod(connection.getEap());
             enterpriseConfig.setPhase2Method(connection.getPhase2());
         }
+
+        // Android 12+ (API 31) requires certificate configuration for EAP methods
+        // that use server certificates (PEAP, TLS, TTLS, UNAUTH_TLS).
+        // Setting CA certificate to null instructs the system to use the system's
+        // trusted CA certificate store for validation, which is the recommended
+        // approach for networks that don't require a specific CA certificate.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                enterpriseConfig.setCaCertificate(null);
+            } catch (Exception e) {
+                Logd("Failed to set CA certificate: " + e.getMessage());
+            }
+        }
+
         return enterpriseConfig;
     }
 
