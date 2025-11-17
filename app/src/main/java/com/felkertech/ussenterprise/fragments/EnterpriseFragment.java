@@ -310,16 +310,19 @@ public class EnterpriseFragment extends Fragment {
         }
         
         // Android 12+ (API 31+) requires certificate validation to be explicitly configured
-        // for enterprise WiFi networks. Use system certificates to allow connection
-        // without requiring specific certificate validation.
+        // for enterprise WiFi networks. Load system CA certificates to satisfy this requirement
+        // while allowing connection to networks that don't require specific certificates.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
-                // Setting CA certificate to null uses the system's trusted CA certificates
-                // This allows the network to connect without requiring a specific certificate
-                // while still maintaining security through the system certificate store
-                enterpriseConfig.setCaCertificate(null);
+                X509Certificate[] systemCerts = loadSystemCaCertificates();
+                if (systemCerts != null && systemCerts.length > 0) {
+                    enterpriseConfig.setCaCertificates(systemCerts);
+                    Logd("Loaded " + systemCerts.length + " system CA certificates for Android 12+");
+                } else {
+                    Logd("Warning: No system CA certificates found for Android 12+");
+                }
             } catch (Exception e) {
-                Logd("Failed to set CA certificate: " + e.getMessage());
+                Logd("Failed to load system CA certificates: " + e.getMessage());
             }
         }
         
@@ -474,6 +477,31 @@ public class EnterpriseFragment extends Fragment {
             Logd("Failed to find CA certificate: " + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Loads all system CA certificates for Android 12+ compatibility.
+     * This satisfies the Android 12 requirement for explicit certificate validation
+     * while allowing connection to networks that don't require specific certificates.
+     */
+    private X509Certificate[] loadSystemCaCertificates() {
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+            ks.load(null);
+            java.util.Enumeration<String> aliases = ks.aliases();
+            java.util.ArrayList<X509Certificate> certs = new java.util.ArrayList<>();
+            while (aliases.hasMoreElements()) {
+                String alias = aliases.nextElement();
+                java.security.cert.Certificate cert = ks.getCertificate(alias);
+                if (cert instanceof X509Certificate) {
+                    certs.add((X509Certificate) cert);
+                }
+            }
+            return certs.toArray(new X509Certificate[0]);
+        } catch (Exception e) {
+            Logd("Failed to load system CA certificates: " + e.getMessage());
+            return null;
+        }
     }
 
     public void printSavedWifiNetworks() {
