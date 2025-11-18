@@ -313,17 +313,22 @@ public class EnterpriseFragment extends Fragment {
         // that use server certificates (PEAP, TLS, TTLS, UNAUTH_TLS).
         // We load system CA certificates to enable validation while allowing
         // connection to any network with a valid certificate from a system-trusted CA.
-        // We also need to set domain suffix match to an empty string to indicate
-        // that validation should be performed against the CA certificates without
-        // requiring a specific domain match.
+        // We also need to set domain suffix match to enable proper validation.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 X509Certificate[] systemCerts = loadSystemCaCertificates();
                 if (systemCerts != null && systemCerts.length > 0) {
                     enterpriseConfig.setCaCertificates(systemCerts);
-                    // Setting domain suffix match to empty string enables validation
-                    // against the provided CA certificates without domain restrictions
-                    enterpriseConfig.setDomainSuffixMatch("");
+                    // Set domain suffix match based on the network
+                    // For UofT, use the official domain; for others, use common TLDs
+                    String domainSuffix;
+                    if ("UofT".equalsIgnoreCase(connection.getSsid())) {
+                        domainSuffix = "utoronto.ca";
+                    } else {
+                        // For non-UofT networks, use common enterprise TLDs
+                        domainSuffix = "com;org;edu;net;gov;ca;uk;de;fr;au;jp;cn;in;br";
+                    }
+                    enterpriseConfig.setDomainSuffixMatch(domainSuffix);
                     Logd("Loaded " + systemCerts.length + " system CA certificates for validation");
                 } else {
                     Logd("Warning: No system CA certificates found");
