@@ -311,14 +311,12 @@ public class EnterpriseFragment extends Fragment {
 
         // Android 12+ (API 31) requires certificate configuration for EAP methods
         // that use server certificates (PEAP, TLS, TTLS, UNAUTH_TLS).
-        // We load system CA certificates to enable validation while allowing
-        // connection to any network with a valid certificate from a system-trusted CA.
-        // We also need to set domain suffix match to enable proper validation.
+        // We load relevant CA certificates and set domain suffix match and TLS version.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
-                X509Certificate[] systemCerts = loadSystemCaCertificates();
-                if (systemCerts != null && systemCerts.length > 0) {
-                    enterpriseConfig.setCaCertificates(systemCerts);
+                X509Certificate[] certs = loadRelevantCaCertificates(connection.getSsid());
+                if (certs != null && certs.length > 0) {
+                    enterpriseConfig.setCaCertificates(certs);
                     // Set domain suffix match based on the network
                     // For UofT, use the official domain; for others, use common TLDs
                     String domainSuffix;
@@ -329,12 +327,29 @@ public class EnterpriseFragment extends Fragment {
                         domainSuffix = "com;org;edu;net;gov;ca;uk;de;fr;au;jp;cn;in;br";
                     }
                     enterpriseConfig.setDomainSuffixMatch(domainSuffix);
-                    Logd("Loaded " + systemCerts.length + " system CA certificates for validation");
+                    
+                    // Set minimum TLS version to 1.2 as per Android 11+ requirements
+                    // This is available from API 23+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        try {
+                            // Use reflection to call setMinimumTlsVersion if available
+                            // WifiEnterpriseConfig.setMinimumTlsVersion(int version)
+                            // where version is 2 for TLS 1.2
+                            java.lang.reflect.Method method = WifiEnterpriseConfig.class.getMethod("setMinimumTlsVersion", int.class);
+                            method.invoke(enterpriseConfig, 2); // 2 = TLS 1.2
+                            Logd("Set minimum TLS version to 1.2");
+                        } catch (Exception tlsEx) {
+                            // Method might not be available on all devices
+                            Logd("Could not set TLS version: " + tlsEx.getMessage());
+                        }
+                    }
+                    
+                    Logd("Loaded " + certs.length + " CA certificate(s) for validation");
                 } else {
-                    Logd("Warning: No system CA certificates found");
+                    Logd("Warning: No CA certificates found");
                 }
             } catch (Exception e) {
-                Logd("Failed to load system CA certificates: " + e.getMessage());
+                Logd("Failed to configure certificates: " + e.getMessage());
             }
         }
 
@@ -510,6 +525,46 @@ public class EnterpriseFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Failed to load system CA certificates", e);
             Logd("Failed to load system CA certificates: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private X509Certificate[] loadRelevantCaCertificates(String ssid) {
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+            ks.load(null);
+            java.util.Enumeration<String> aliases = ks.aliases();
+            List<X509Certificate> certificates = new ArrayList<>();
+            
+            // For UofT, look for Sectigo certificates (as per official instructions)
+            if ("UofT".equalsIgnoreCase(ssid)) {
+                while (aliases.hasMoreElements()) {
+                    String alias = aliases.nextElement();
+                    // Look for Sectigo certificates which UofT uses
+                    if (alias.toLowerCase().contains("sectigo") || 
+                        alias.toLowerCase().contains("comodo")) {
+                        X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+                        if (cert != null) {
+                            certificates.add(cert);
+                        }
+                    }
+                }
+                
+                // If no Sectigo certificates found, fallback to all certificates
+                // This handles cases where user hasn't manually installed UofT certs
+                if (certificates.isEmpty()) {
+                    Logd("No Sectigo certificates found, using all system certificates");
+                    return loadSystemCaCertificates();
+                }
+            } else {
+                // For non-UofT networks, use all system certificates
+                return loadSystemCaCertificates();
+            }
+            
+            return certificates.toArray(new X509Certificate[0]);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to load relevant CA certificates", e);
+            Logd("Failed to load relevant CA certificates: " + e.getMessage());
         }
         return null;
     }
