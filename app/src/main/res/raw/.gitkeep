@@ -1,0 +1,4 @@
+# Placeholder file to ensure the raw directory is tracked by git
+# Place certificate files here:
+# - uoft_root_ca.cer (Root CA certificate in PEM format)
+# - uoft_intermediate_ca.cer (Optional: Intermediate CA certificate in PEM format)
