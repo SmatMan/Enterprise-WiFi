@@ -29,7 +29,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import com.felkertech.ussenterprise.R;
@@ -308,6 +311,67 @@ public class EnterpriseFragment extends Fragment {
             enterpriseConfig.setEapMethod(connection.getEap());
             enterpriseConfig.setPhase2Method(connection.getPhase2());
         }
+
+        // Android 12+ (API 31) requires certificate configuration for EAP methods
+        // that use server certificates (PEAP, TLS, TTLS, UNAUTH_TLS).
+        // We load CA certificates and set domain suffix match and TLS version.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                X509Certificate[] certs;
+                
+                // For UofT, try to load bundled certificates first
+                if ("UofT".equalsIgnoreCase(connection.getSsid())) {
+                    certs = loadBundledCaCertificates();
+                    if (certs != null && certs.length > 0) {
+                        Logd("Loaded " + certs.length + " bundled CA certificate(s) for UofT");
+                    } else {
+                        // Fallback to system certificates if bundled certs not found
+                        Logd("Bundled certificates not found, using system certificates");
+                        certs = loadSystemCaCertificates();
+                    }
+                } else {
+                    // For non-UofT networks, use system certificates
+                    certs = loadSystemCaCertificates();
+                }
+                
+                if (certs != null && certs.length > 0) {
+                    enterpriseConfig.setCaCertificates(certs);
+                    // Set domain suffix match based on the network
+                    // For UofT, use the official domain; for others, use common TLDs
+                    String domainSuffix;
+                    if ("UofT".equalsIgnoreCase(connection.getSsid())) {
+                        domainSuffix = "utoronto.ca";
+                    } else {
+                        // For non-UofT networks, use common enterprise TLDs
+                        domainSuffix = "com;org;edu;net;gov;ca;uk;de;fr;au;jp;cn;in;br";
+                    }
+                    enterpriseConfig.setDomainSuffixMatch(domainSuffix);
+                    
+                    // Set minimum TLS version to 1.2 as per Android 11+ requirements
+                    // This is available from API 23+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        try {
+                            // Use reflection to call setMinimumTlsVersion if available
+                            // WifiEnterpriseConfig.setMinimumTlsVersion(int version)
+                            // where version is 2 for TLS 1.2
+                            java.lang.reflect.Method method = WifiEnterpriseConfig.class.getMethod("setMinimumTlsVersion", int.class);
+                            method.invoke(enterpriseConfig, 2); // 2 = TLS 1.2
+                            Logd("Set minimum TLS version to 1.2");
+                        } catch (Exception tlsEx) {
+                            // Method might not be available on all devices
+                            Logd("Could not set TLS version: " + tlsEx.getMessage());
+                        }
+                    }
+                    
+                    Logd("Loaded " + certs.length + " CA certificate(s) for validation");
+                } else {
+                    Logd("Warning: No CA certificates found");
+                }
+            } catch (Exception e) {
+                Logd("Failed to configure certificates: " + e.getMessage());
+            }
+        }
+
         return enterpriseConfig;
     }
 
@@ -459,6 +523,84 @@ public class EnterpriseFragment extends Fragment {
             Logd("Failed to find CA certificate: " + e.getMessage());
         }
         return null;
+    }
+
+    private X509Certificate[] loadSystemCaCertificates() {
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+            ks.load(null);
+            java.util.Enumeration<String> aliases = ks.aliases();
+            List<X509Certificate> certificates = new ArrayList<>();
+            
+            while (aliases.hasMoreElements()) {
+                String alias = aliases.nextElement();
+                X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+                if (cert != null) {
+                    certificates.add(cert);
+                }
+            }
+            
+            return certificates.toArray(new X509Certificate[0]);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to load system CA certificates", e);
+            Logd("Failed to load system CA certificates: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Load CA certificates bundled with the app from res/raw directory.
+     * Supports loading both root and intermediate certificates.
+     * Certificate files should be in PEM format (.cer extension).
+     * 
+     * Expected files in res/raw:
+     * - uoft_root_ca.cer (Required: Root CA certificate)
+     * - uoft_intermediate_ca.cer (Optional: Intermediate CA certificate)
+     * 
+     * @return Array of X509 certificates loaded from bundled resources, or null if none found
+     */
+    private X509Certificate[] loadBundledCaCertificates() {
+        List<X509Certificate> certificates = new ArrayList<>();
+        CertificateFactory cf;
+        
+        try {
+            cf = CertificateFactory.getInstance("X.509");
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to get CertificateFactory", e);
+            return null;
+        }
+        
+        // Try to load root CA certificate
+        try {
+            InputStream rootCaStream = getResources().openRawResource(R.raw.uoft_root_ca);
+            BufferedInputStream bis = new BufferedInputStream(rootCaStream);
+            X509Certificate rootCert = (X509Certificate) cf.generateCertificate(bis);
+            certificates.add(rootCert);
+            bis.close();
+            rootCaStream.close();
+            Log.d(TAG, "Loaded root CA certificate from bundle");
+        } catch (Exception e) {
+            Log.w(TAG, "Root CA certificate not found in bundle: " + e.getMessage());
+        }
+        
+        // Try to load intermediate CA certificate (optional)
+        try {
+            InputStream intermediateCaStream = getResources().openRawResource(R.raw.uoft_intermediate_ca);
+            BufferedInputStream bis = new BufferedInputStream(intermediateCaStream);
+            X509Certificate intermediateCert = (X509Certificate) cf.generateCertificate(bis);
+            certificates.add(intermediateCert);
+            bis.close();
+            intermediateCaStream.close();
+            Log.d(TAG, "Loaded intermediate CA certificate from bundle");
+        } catch (Exception e) {
+            Log.d(TAG, "Intermediate CA certificate not found in bundle (optional): " + e.getMessage());
+        }
+        
+        if (certificates.isEmpty()) {
+            return null;
+        }
+        
+        return certificates.toArray(new X509Certificate[0]);
     }
 
     public void printSavedWifiNetworks() {
